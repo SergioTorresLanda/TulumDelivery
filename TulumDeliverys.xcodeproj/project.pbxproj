@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		44D95C8C2DF8F0610051D6DB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 44D95C712DF8F05D0051D6DB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44D95C782DF8F05D0051D6DB;
+			remoteInfo = TulumDeliverys;
+		};
+		44D95C962DF8F0610051D6DB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 44D95C712DF8F05D0051D6DB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44D95C782DF8F05D0051D6DB;
+			remoteInfo = TulumDeliverys;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		44D95C792DF8F05D0051D6DB /* TulumDeliverys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TulumDeliverys.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		44D95C8B2DF8F0610051D6DB /* TulumDeliverysTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TulumDeliverysTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		44D95C952DF8F0610051D6DB /* TulumDeliverysUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TulumDeliverysUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		44D95C7B2DF8F05D0051D6DB /* TulumDeliverys */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TulumDeliverys;
+			sourceTree = "<group>";
+		};
+		44D95C8E2DF8F0610051D6DB /* TulumDeliverysTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TulumDeliverysTests;
+			sourceTree = "<group>";
+		};
+		44D95C982DF8F0610051D6DB /* TulumDeliverysUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TulumDeliverysUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		44D95C762DF8F05D0051D6DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44D95C882DF8F0610051D6DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44D95C922DF8F0610051D6DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		44D95C702DF8F05D0051D6DB = {
+			isa = PBXGroup;
+			children = (
+				44D95C7B2DF8F05D0051D6DB /* TulumDeliverys */,
+				44D95C8E2DF8F0610051D6DB /* TulumDeliverysTests */,
+				44D95C982DF8F0610051D6DB /* TulumDeliverysUITests */,
+				44D95C7A2DF8F05D0051D6DB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		44D95C7A2DF8F05D0051D6DB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				44D95C792DF8F05D0051D6DB /* TulumDeliverys.app */,
+				44D95C8B2DF8F0610051D6DB /* TulumDeliverysTests.xctest */,
+				44D95C952DF8F0610051D6DB /* TulumDeliverysUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		44D95C782DF8F05D0051D6DB /* TulumDeliverys */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44D95C9F2DF8F0610051D6DB /* Build configuration list for PBXNativeTarget "TulumDeliverys" */;
+			buildPhases = (
+				44D95C752DF8F05D0051D6DB /* Sources */,
+				44D95C762DF8F05D0051D6DB /* Frameworks */,
+				44D95C772DF8F05D0051D6DB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				44D95C7B2DF8F05D0051D6DB /* TulumDeliverys */,
+			);
+			name = TulumDeliverys;
+			packageProductDependencies = (
+			);
+			productName = TulumDeliverys;
+			productReference = 44D95C792DF8F05D0051D6DB /* TulumDeliverys.app */;
+			productType = "com.apple.product-type.application";
+		};
+		44D95C8A2DF8F0610051D6DB /* TulumDeliverysTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44D95CA22DF8F0610051D6DB /* Build configuration list for PBXNativeTarget "TulumDeliverysTests" */;
+			buildPhases = (
+				44D95C872DF8F0610051D6DB /* Sources */,
+				44D95C882DF8F0610051D6DB /* Frameworks */,
+				44D95C892DF8F0610051D6DB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				44D95C8D2DF8F0610051D6DB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				44D95C8E2DF8F0610051D6DB /* TulumDeliverysTests */,
+			);
+			name = TulumDeliverysTests;
+			packageProductDependencies = (
+			);
+			productName = TulumDeliverysTests;
+			productReference = 44D95C8B2DF8F0610051D6DB /* TulumDeliverysTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		44D95C942DF8F0610051D6DB /* TulumDeliverysUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44D95CA52DF8F0610051D6DB /* Build configuration list for PBXNativeTarget "TulumDeliverysUITests" */;
+			buildPhases = (
+				44D95C912DF8F0610051D6DB /* Sources */,
+				44D95C922DF8F0610051D6DB /* Frameworks */,
+				44D95C932DF8F0610051D6DB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				44D95C972DF8F0610051D6DB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				44D95C982DF8F0610051D6DB /* TulumDeliverysUITests */,
+			);
+			name = TulumDeliverysUITests;
+			packageProductDependencies = (
+			);
+			productName = TulumDeliverysUITests;
+			productReference = 44D95C952DF8F0610051D6DB /* TulumDeliverysUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		44D95C712DF8F05D0051D6DB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					44D95C782DF8F05D0051D6DB = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					44D95C8A2DF8F0610051D6DB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 44D95C782DF8F05D0051D6DB;
+					};
+					44D95C942DF8F0610051D6DB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 44D95C782DF8F05D0051D6DB;
+					};
+				};
+			};
+			buildConfigurationList = 44D95C742DF8F05D0051D6DB /* Build configuration list for PBXProject "TulumDeliverys" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 44D95C702DF8F05D0051D6DB;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 44D95C7A2DF8F05D0051D6DB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				44D95C782DF8F05D0051D6DB /* TulumDeliverys */,
+				44D95C8A2DF8F0610051D6DB /* TulumDeliverysTests */,
+				44D95C942DF8F0610051D6DB /* TulumDeliverysUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		44D95C772DF8F05D0051D6DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44D95C892DF8F0610051D6DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44D95C932DF8F0610051D6DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		44D95C752DF8F05D0051D6DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44D95C872DF8F0610051D6DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44D95C912DF8F0610051D6DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		44D95C8D2DF8F0610051D6DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44D95C782DF8F05D0051D6DB /* TulumDeliverys */;
+			targetProxy = 44D95C8C2DF8F0610051D6DB /* PBXContainerItemProxy */;
+		};
+		44D95C972DF8F0610051D6DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44D95C782DF8F05D0051D6DB /* TulumDeliverys */;
+			targetProxy = 44D95C962DF8F0610051D6DB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		44D95C9D2DF8F0610051D6DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		44D95C9E2DF8F0610051D6DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		44D95CA02DF8F0610051D6DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TulumDeliverys/Preview Content\"";
+				DEVELOPMENT_TEAM = MUDF5363RA;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverys;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		44D95CA12DF8F0610051D6DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TulumDeliverys/Preview Content\"";
+				DEVELOPMENT_TEAM = MUDF5363RA;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverys;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		44D95CA32DF8F0610051D6DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MUDF5363RA;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverysTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TulumDeliverys.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TulumDeliverys";
+			};
+			name = Debug;
+		};
+		44D95CA42DF8F0610051D6DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MUDF5363RA;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverysTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TulumDeliverys.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TulumDeliverys";
+			};
+			name = Release;
+		};
+		44D95CA62DF8F0610051D6DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MUDF5363RA;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverysUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TulumDeliverys;
+			};
+			name = Debug;
+		};
+		44D95CA72DF8F0610051D6DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MUDF5363RA;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverysUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TulumDeliverys;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		44D95C742DF8F05D0051D6DB /* Build configuration list for PBXProject "TulumDeliverys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44D95C9D2DF8F0610051D6DB /* Debug */,
+				44D95C9E2DF8F0610051D6DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44D95C9F2DF8F0610051D6DB /* Build configuration list for PBXNativeTarget "TulumDeliverys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44D95CA02DF8F0610051D6DB /* Debug */,
+				44D95CA12DF8F0610051D6DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44D95CA22DF8F0610051D6DB /* Build configuration list for PBXNativeTarget "TulumDeliverysTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44D95CA32DF8F0610051D6DB /* Debug */,
+				44D95CA42DF8F0610051D6DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44D95CA52DF8F0610051D6DB /* Build configuration list for PBXNativeTarget "TulumDeliverysUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44D95CA62DF8F0610051D6DB /* Debug */,
+				44D95CA72DF8F0610051D6DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 44D95C712DF8F05D0051D6DB /* Project object */;
+}
