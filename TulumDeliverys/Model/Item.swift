@@ -7,22 +7,30 @@
 
 import Foundation
 import SwiftData
+import FirebaseFirestore
+//import FirebaseFirestoreSwift
 
 @Model
 final class Item {
     var id : String
-    var timestamp: Date
+    //var timestamp: Date
     var name : String
     var isFavorite : Bool
     var image: String
 
-    init(timestamp: Date, name:String, image:String) {
-        id = UUID().uuidString
-        self.timestamp = timestamp
+    init(id:String, name:String, image:String) {
+        self.id = id
         self.name = name
         self.image = image
         isFavorite = false
     }
+}
+
+struct Item2: Codable, Identifiable { // Identifiable es bueno para SwiftUI
+    @DocumentID var id: String? // Mapea automáticamente el ID del documento
+    var name: String
+    var image: String
+    var price: Int
 }
 
 struct User {

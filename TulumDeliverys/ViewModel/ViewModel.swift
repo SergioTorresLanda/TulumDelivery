@@ -35,7 +35,7 @@ final class MyViewModel {
         do {
             products = try repository.getProducts(isFavorite: false)
         } catch {
-            print("Fallo la busqueda de Amiibos: \(error.localizedDescription)")
+            print("Fallo la busqueda de Productos: \(error.localizedDescription)")
             products = []
         }
     }

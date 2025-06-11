@@ -31,7 +31,12 @@ class Repository: ProductRepositoryProtocol {
 
     func fetchAndPersistProducts() async throws {
         let api = try await remoteDataSource.fetchProductsFromAPI()
-        try localDataSource.insertOrUpdate(products: api)
+        var itemss: [Item] = []
+        for prod in api {
+            let item = Item(id: prod.id ?? UUID().uuidString, name: prod.name, image: prod.image)
+            itemss.append(item)
+        }
+        try localDataSource.insertOrUpdate(products: itemss)
     }
     
     func deleteProducts(at offsets: IndexSet, in products: [Item]) {
