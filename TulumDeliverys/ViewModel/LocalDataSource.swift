@@ -10,6 +10,7 @@ import SwiftData
 protocol LocalDataSourceProtocol {
     func insertOrUpdate(products: [Item]) throws
     func addFavorite(_ product: Item) throws
+    func removeFavorite(_ product: Item) throws
     func deleteAmiibos(at offsets: IndexSet, in products: [Item]) throws
     func deleteFavorite(id: String, in favs: [Item]) throws
     func deleteFavorites(at offsets: IndexSet, in favs: [Item]) throws
@@ -34,7 +35,7 @@ class LocalDataSource: LocalDataSourceProtocol {
 
             let existingItems = try modelContext.fetch(descriptor)
 
-            if let existingItem = existingItems.first {
+            if existingItems.first != nil {
                 // Update existing item
              //   existingItem.name = product.name
            //     existingItem.image = product.image
@@ -54,9 +55,17 @@ class LocalDataSource: LocalDataSourceProtocol {
     }
 
     func addFavorite(_ product: Item) throws {
-        product.isFavorite = true
-        // No hay necesidad de insertar porque el elemento ya existe en el contexto, solo se modifica la propiedad y se guarda automaticamente. Si no se guardara se puede acudir a:
-       // try modelContext.save() no necesario
+        if !product.isFavorite{
+            product.isFavorite = true
+        }
+        product.selectedItems+=1
+    }
+    
+    func removeFavorite(_ product: Item) throws {
+        if product.selectedItems == 1 {
+            product.isFavorite=false
+        }
+        product.selectedItems-=1
     }
     
     func deleteAmiibos(at offsets: IndexSet, in products: [Item]) throws {

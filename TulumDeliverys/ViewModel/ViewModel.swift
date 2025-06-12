@@ -14,7 +14,10 @@ final class MyViewModel {
     
     private let repository: ProductRepositoryProtocol // Injeccion de dependencia abstracta
     var products: [Item] = [] //Data pública guardada localmente listos para presentar a la vista
+    var categorys: Set<String> = []
     var selected: [Item] = [] //Productos seleccionados guardados localmente listos para presentar a la vista
+    var pretotal:Int = 0
+    var totalItems = 0
     private(set) var isLoading = false //propiedad para menejar el estado del ActivityIndicator (en la vista)
     
     //Se inyecta el contexto al inicializarse el viewmodel
@@ -34,26 +37,29 @@ final class MyViewModel {
     func fetchProducts() {
         do {
             products = try repository.getProducts(isFavorite: false)
+            for prod in products{
+                categorys.insert(prod.category)
+            }
         } catch {
             print("Fallo la busqueda de Productos: \(error.localizedDescription)")
             products = []
         }
     }
     func fetchFavs() {
+        pretotal=0
+        totalItems=0
         do {
             selected = try repository.getProducts(isFavorite: true)
+            for s in selected {
+                pretotal+=s.selectedItems*s.price
+                totalItems+=s.selectedItems
+            }
         } catch {
             print("Fallo la busqueda de Seleccionados: \(error.localizedDescription)")
             selected = []
         }
     }
     
-    // MARK: PERSISTENCIA DE LA DATA REGULAR
-    // Eliminar elementos
-    func deleteProducts(at offsets: IndexSet) {
-        repository.deleteProducts(at: offsets, in: products)
-        fetchProducts()
-    }
     // MARK: PERSISTENCIA DE FAVORITOS
     //Agregar favoritos
     func addFavoriteToSD(with product: Item){
@@ -61,8 +67,8 @@ final class MyViewModel {
         fetchFavs()
     }
     // Eliminar de favoritos desde la lista general (boton favorito)
-    func deleteFavoriteFromSD(id: String) {
-        repository.deleteFavorite(id: id, in: selected)
+    func removeFavorite(with product: Item) {
+        repository.removeFavorite(product)
         fetchFavs()
     }
     // Eliminar de favoritos desde la lista de favoritos (accion de eliminar)

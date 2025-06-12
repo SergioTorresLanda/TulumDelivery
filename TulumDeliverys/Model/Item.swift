@@ -17,12 +17,18 @@ final class Item {
     var name : String
     var isFavorite : Bool
     var image: String
+    var price: Int
+    var category:String
+    var selectedItems:Int
 
-    init(id:String, name:String, image:String) {
+    init(id:String, name:String, image:String, price:Int, category:String) {
         self.id = id
         self.name = name
         self.image = image
+        self.price = price
+        self.category = category
         isFavorite = false
+        selectedItems=0
     }
 }
 
@@ -31,6 +37,7 @@ struct Item2: Codable, Identifiable { // Identifiable es bueno para SwiftUI
     var name: String
     var image: String
     var price: Int
+    var category:String
 }
 
 struct User {

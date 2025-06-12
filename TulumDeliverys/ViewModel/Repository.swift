@@ -11,6 +11,7 @@ import SwiftData
 protocol ProductRepositoryProtocol {
     func fetchAndPersistProducts() async throws
     func addFavorite(_ product: Item)
+    func removeFavorite(_ product: Item)
     func deleteProducts(at offsets: IndexSet, in products: [Item])
     func deleteFavorite(id: String, in favs: [Item])
     func deleteFavorites(at offsets: IndexSet, in favs: [Item])
@@ -33,9 +34,15 @@ class Repository: ProductRepositoryProtocol {
         let api = try await remoteDataSource.fetchProductsFromAPI()
         var itemss: [Item] = []
         for prod in api {
-            let item = Item(id: prod.id ?? UUID().uuidString, name: prod.name, image: prod.image)
+            let item = Item(id: prod.id ?? UUID().uuidString,
+                            name: prod.name,
+                            image: prod.image,
+                            price: prod.price,
+                            category: prod.category
+            )
             itemss.append(item)
         }
+        
         try localDataSource.insertOrUpdate(products: itemss)
     }
     
@@ -45,6 +52,10 @@ class Repository: ProductRepositoryProtocol {
 
     func addFavorite(_ product: Item) {
         try? localDataSource.addFavorite(product)
+    }
+    
+    func removeFavorite(_ product: Item) {
+        try? localDataSource.removeFavorite(product)
     }
 
     func deleteFavorite(id: String, in favs: [Item]) {

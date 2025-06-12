@@ -10,38 +10,45 @@ import SwiftUI
 struct ProductView: View {
     var product: Item
     var viewmodel: MyViewModel
-    @State var isInFavoritesList = false
-    @State private var active:Bool = false
+    @State var favCount = 0
     
     var body: some View {
-        HStack{
-            Text(product.id + " - " + product.name).bold()
-            Spacer()
+        VStack{
             AsyncImage(url: URL(string: product.image)) { image in
-                image.resizable()
+                image.resizable().aspectRatio(contentMode: .fit)
             } placeholder: {
-                Color.red
+                Image(systemName: "slowmo")
             }
             .frame(width: 90, height: 90)
             .clipShape(.rect(cornerRadius: 25))
             Spacer()
-            isInFavoritesList ? // Si estoy en la lista de favoritos, que el botón no funcione y sea estatico (imagen).
-            Button{
-            } label: {
-                Image(systemName: "heart.fill")
-            }.background(Color.black)
-                .foregroundColor(Color.red)
-            :  // Si no estoy en la lista de favoritos, que el botón funcione.
-            Button{
-                active ? viewmodel.deleteFavoriteFromSD(id: product.id) : viewmodel.addFavoriteToSD(with: product)
-                active.toggle()
-            } label: {
-                Image(systemName: "heart.fill")
-            }.background(Color.black)
-                .foregroundColor(active ? Color.red : Color.white)
-           
+            Text(product.name).bold().lineLimit(2).multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .fixedSize(horizontal: false, vertical: true)
+                .font(.system(size: 16))
+            Text("$"+String(product.price))
+            Spacer()
+            HStack{
+                Button{
+                    if favCount>0{
+                        viewmodel.removeFavorite(with: product)
+                        favCount-=1
+                    }
+                } label: {
+                    Image(systemName: "minus.rectangle.fill")
+                }//.background(Color.yellow)
+                    .foregroundColor(Color.yellow)
+                Text(String(favCount))
+                Button{
+                    viewmodel.addFavoriteToSD(with: product)
+                    favCount+=1
+                } label: {
+                    Image(systemName: "plus.rectangle.fill")
+                }//.background(Color.gray)
+                .foregroundColor(Color.yellow)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: 120, alignment: .leading)
         .padding()
         .background(.gray.opacity(0.1),
                     in: RoundedRectangle(cornerRadius: 10,
@@ -50,3 +57,20 @@ struct ProductView: View {
     }
 }
 
+/*
+ VStack {
+         Image(systemName: "photo")
+             .resizable()
+             .scaledToFit()
+             .frame(width: 100, height: 100)
+             .background(Color.gray.opacity(0.2))
+             .cornerRadius(10)
+         Text(product.name)
+             .font(.caption)
+             .lineLimit(1)
+     }
+     .padding(8)
+     .background(Color.white)
+     .cornerRadius(12)
+     .shadow(radius: 2)
+ */

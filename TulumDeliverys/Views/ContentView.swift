@@ -20,32 +20,32 @@ struct ContentView: View {
                 }else{
                     NavigationView {
                         VStack{
-                            Spacer()
                             HStack{
                                 Spacer()
-                                Text("Nombre Apellido")
+                                Text("Aldea Tulum Deliverys").font(.system(size: 25)).bold()
                                 Spacer()
                                 Spacer()
                                 Spacer()
-                                NavigationLink(destination: CartView(viewmodel: vm)) {
-                                    ButtonView()
+                                NavigationLink(destination: CartView(viewmodel: vm).navigationBarBackButtonHidden(true)) {
+                                    ButtonView(vm: vm)
                                 }
                                 Spacer()
                             }
                             Spacer()
                             Divider()
-                            Text("Products available:  \(vm.products.count)").bold().font(.title3)
+                            Text("Step 1. Add some stuff to your cart.").font(.system(size: 20))
+                            Text("Products available:  \(vm.products.count)").font(.system(size: 10))
+                            //.foregroundColor(Color.yellow)
+                            Divider()
                             List{
-                                ForEach(vm.products, id: \.id) { prod in
-                                    ProductView(product: prod, viewmodel: vm)
-                                }
-                                .onDelete { indexSet in
-                                    vm.deleteProducts(at: indexSet)
+                                ForEach(Array(vm.categorys)) { cat in
+                                    MainHCollectionView(products: vm.products.filter{$0.category == cat}, category: cat.uppercased(), vm: vm)
                                 }
                                 .listRowSeparator(.hidden)
                             }
                             .listStyle(.plain)
-                        }
+                           
+                        }.padding(.top, 1)
                     }
                 }
             }
@@ -72,16 +72,21 @@ struct ContentView: View {
             //manejar la desaparicion de la vista (similar a viewDidDissapear en controllers)
         }
     }
+    
+    
 }
 
 struct ButtonView: View {
+    var vm: MyViewModel
     var body: some View {
-        Text("Cart").font(.title)
-            .frame(width: 150, height: 50, alignment: .center)
-            .background(Color.red)
-            .foregroundColor(Color.white)
-            .border(.red, width: 5)
-            .cornerRadius(25)
+        HStack{
+            Image(systemName: "cart.fill").frame(width: 50, height: 50, alignment: .center).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
+            Text((String(vm.totalItems))).font(.system(size: 20))
+                //.background(Color.blue)
+                .foregroundColor(Color.yellow)
+                //.border(.blue, width: 5)
+                //.cornerRadius(25)
+        }
     }
 }
 
@@ -96,3 +101,16 @@ struct ButtonView: View {
     }
 }
 
+/*List{
+    ForEach(vm.products, id: \.id) { prod in
+        ProductView(product: prod, viewmodel: vm)
+    }
+    .listRowSeparator(.hidden)
+}
+.listStyle(.plain)*/
+extension String: @retroactive Identifiable {
+    public typealias ID = Int
+    public var id: Int {
+        return hash
+    }
+}
