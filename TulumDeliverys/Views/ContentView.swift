@@ -11,7 +11,8 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext //Capa entre los objetos y la memoria.
     @State private var viewmodel: MyViewModel? //opcional por ser "late init"
-    
+    //@State private var navigateToCart = false
+
     var body: some View {
         ZStack{
             if let vm = viewmodel {
@@ -19,6 +20,7 @@ struct ContentView: View {
                     ProgressView()
                 }else{
                     NavigationView {
+                    //NavigationStack {
                         VStack{
                             HStack{
                                 Spacer()
@@ -26,9 +28,16 @@ struct ContentView: View {
                                 Spacer()
                                 Spacer()
                                 Spacer()
-                                NavigationLink(destination: CartView(viewmodel: vm).navigationBarBackButtonHidden(true)) {
+                                NavigationLink(destination: CartView(viewmodel: vm)
+                                    .navigationBarBackButtonHidden(true)
+                                    .toolbar(.hidden, for: .navigationBar)) {
                                     ButtonView(vm: vm)
                                 }
+                               /* Button {
+                                    navigateToCart = true
+                                } label: {
+                                    ButtonView(vm: vm)
+                                }*/
                                 Spacer()
                             }
                             Spacer()
@@ -46,6 +55,9 @@ struct ContentView: View {
                             .listStyle(.plain)
                            
                         }.padding(.top, 1)
+                        /*.navigationDestination(isPresented: $navigateToCart) {
+                            CartView(viewmodel: vm).navigationBarBackButtonHidden(true)
+                        }*/
                     }
                 }
             }
@@ -80,13 +92,14 @@ struct ButtonView: View {
     var vm: MyViewModel
     var body: some View {
         HStack{
-            Image(systemName: "cart.fill").frame(width: 50, height: 50, alignment: .center).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
-            Text((String(vm.totalItems))).font(.system(size: 20))
+            Image(systemName: "cart.fill").frame(alignment: .trailing).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
+            Text((String(vm.totalItems)+"    ")).font(.system(size: 20)).frame(alignment: .leading)
                 //.background(Color.blue)
                 .foregroundColor(Color.yellow)
-                //.border(.blue, width: 5)
-                //.cornerRadius(25)
         }
+        .border(.yellow, width: 1)
+        //.cornerRadius(10)
+        .clipped()
     }
 }
 

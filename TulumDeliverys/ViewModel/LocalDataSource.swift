@@ -84,7 +84,11 @@ class LocalDataSource: LocalDataSourceProtocol {
     
     func deleteFavorites(at offsets: IndexSet, in favs: [Item]) throws {
         for index in offsets {
-            modelContext.delete(favs[index])
+           // modelContext.delete(favs[index])
+            if favs[index].selectedItems == 1 {
+                favs[index].isFavorite=false
+            }
+            favs[index].selectedItems-=1
         }
     //try modelContext.save() no necesario
     }

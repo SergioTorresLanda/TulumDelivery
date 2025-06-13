@@ -8,16 +8,18 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import FirebaseFirestore
 
 @Observable
 final class MyViewModel {
-    
+    private let db = Firestore.firestore()
     private let repository: ProductRepositoryProtocol // Injeccion de dependencia abstracta
     var products: [Item] = [] //Data pública guardada localmente listos para presentar a la vista
     var categorys: Set<String> = []
     var selected: [Item] = [] //Productos seleccionados guardados localmente listos para presentar a la vista
     var pretotal:Int = 0
     var totalItems = 0
+    var deliveryId = ""
     private(set) var isLoading = false //propiedad para menejar el estado del ActivityIndicator (en la vista)
     
     //Se inyecta el contexto al inicializarse el viewmodel
@@ -25,6 +27,29 @@ final class MyViewModel {
          self.repository = repository
          fetchProducts() //recuperar Data offline
      }
+    
+    func writeDeliveryOrder(total:String){
+        var dictProds:[String:Any] = [:]
+        for prod in selected{
+            dictProds[prod.name]=prod.selectedItems
+        }
+        let dict:[String:Any] = ["usuario":UUID().uuidString,
+                                 "timestampServer":FieldValue.serverTimestamp(),
+                                 //"timestamp":ts,
+                                 "productos":dictProds,
+                                 "total":total]
+        var ref: DocumentReference? = nil
+        
+        ref=db.collection("deliverys").addDocument(data: dict){ err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                //self.db.collection("usuarios").document(self.id!).collection("deliverys").document(ref!.documentID).setData(dict)
+                print("Document added with ID: \(ref!.documentID)")
+                self.deliveryId=ref!.documentID
+            }
+        }
+    }
     
     func fetchData() async throws {
        isLoading = true

@@ -7,10 +7,13 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import FirebaseFirestore
 
 struct CartView: View {
     @State var viewmodel: MyViewModel
     @Environment(\.dismiss) var dismiss
+    @State private var navigateToMap = false
+
     var pretotalPrice:String {
         return viewmodel.pretotal.formatted(.number.grouping(.automatic))
     }
@@ -22,9 +25,13 @@ struct CartView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack{
+                Divider()
                 Text("Step 2. Confirm your Cart items and your total bill.").font(.system(size: 20))
+                Divider()
+                Spacer()
+                Text("*You can edit your Cart and remove some stuff by swiping to the left on each item.").font(.system(size: 10))
                 List{
                     ForEach(viewmodel.selected, id: \.id) { item in
                         CartItemView(product: item,
@@ -38,7 +45,7 @@ struct CartView: View {
                 }
                 .listStyle(.plain)
                 // .navigationTitle("Step 2. Confirm your Cart items and select payment method.")
-                .navigationBarTitleDisplayMode(.large)
+                // .navigationBarTitleDisplayMode(.large)
                 .toolbar{
                     ToolbarItem(placement: .topBarLeading) {
                         Button(action: {
@@ -48,12 +55,18 @@ struct CartView: View {
                         }.tint(Color.yellow)
                     }
                     ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink(destination: MapView(viewmodel: viewmodel)) {
-                            ConfirmView(vm: viewmodel)
+                        Button {
+                            viewmodel.writeDeliveryOrder(total: total)
+                            navigateToMap = true
+                        } label: {
+                            ConfirmView(vm: viewmodel, total: total)
                         }
+                        /*NavigationLink(destination: MapView(viewmodel: viewmodel).navigationBarBackButtonHidden(true)) {
+                            ConfirmView(vm: viewmodel, total: total)
+                        }*/
                     }
                 }
-                
+                Divider()
                 Text("Subtotal: $" + pretotalPrice + "  ")
                     .frame(maxWidth: .infinity, alignment: .trailing).padding(7)
                 Spacer()
@@ -67,12 +80,18 @@ struct CartView: View {
                 Divider()
                 Spacer()
             }
+           .navigationDestination(isPresented: $navigateToMap) {
+                MapView(viewmodel: viewmodel)
+                    .navigationBarBackButtonHidden(true)
+            }
         }
     }
 }
 
 struct ConfirmView: View {
     var vm: MyViewModel
+    @State var total: String
+
     var body: some View {
         HStack{
             Image(systemName: "checkmark.seal.fill").frame(width: 50, height: 50, alignment: .center).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
