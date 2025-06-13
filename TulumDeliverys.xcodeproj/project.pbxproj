@@ -58,12 +58,20 @@
 			);
 			target = 44D95C942DF8F0610051D6DB /* TulumDeliverysUITests */;
 		};
+		44D95D572DFB88870051D6DB /* Exceptions for "TulumDeliverys" folder in "TulumDeliverys" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 44D95C782DF8F05D0051D6DB /* TulumDeliverys */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		44D95C7B2DF8F05D0051D6DB /* TulumDeliverys */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				44D95D572DFB88870051D6DB /* Exceptions for "TulumDeliverys" folder in "TulumDeliverys" target */,
 				44D95CC22DF91F410051D6DB /* Exceptions for "TulumDeliverys" folder in "TulumDeliverysTests" target */,
 				44D95CC32DF91F410051D6DB /* Exceptions for "TulumDeliverys" folder in "TulumDeliverysUITests" target */,
 			);
@@ -467,16 +475,18 @@
 				DEVELOPMENT_TEAM = MUDF5363RA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TulumDeliverys/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need to access your location to know where to send your goods.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need to access your location to know where to send your goods.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -496,16 +506,18 @@
 				DEVELOPMENT_TEAM = MUDF5363RA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TulumDeliverys/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need to access your location to know where to send your goods.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need to access your location to know where to send your goods.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.apkings.TulumDeliverys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
