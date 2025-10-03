@@ -22,10 +22,35 @@ final class MyViewModel {
     var rds = RemoteDataSource()
     private(set) var isLoading = false //propiedad para menejar el estado del ActivityIndicator (en la vista)
     private(set) var deleteAll = false
+    private(set) var isDelivery = false
+    private(set) var timeLeft = 20
     //Se inyecta el contexto al inicializarse el viewmodel
     init(repository:ProductRepositoryProtocol) {
          self.repository = repository
      }
+    
+    func confirmDelivery(){
+        //TODO: add to DB confirmation
+        timeLeft=20
+        isDelivery=false
+    }
+    func cancelDelivery(){
+        //TODO: add to DB cancelation
+        timeLeft=20
+        isDelivery=false
+    }
+    
+    func setDelivery(){
+        isDelivery=true
+        count()
+    }
+    
+    func count(){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 60.0) {
+            self.timeLeft-=1
+            self.timeLeft > 0 ? self.count() : ()
+        }
+    }
     
     func writeDeliveryOrder(total:String){
         var dictProds:[String:Any] = [:]

@@ -18,10 +18,10 @@ struct CartView: View {
         return viewmodel.pretotal.formatted(.number.grouping(.automatic))
     }
     var deliveryCost:String {
-        return (Double(viewmodel.pretotal)*0.2).formatted(.number.grouping(.automatic))
+        return (Double(viewmodel.pretotal)*0.25).formatted(.number.grouping(.automatic))
     }
     var total:String {
-        return (Double(viewmodel.pretotal)*1.2).formatted(.number.grouping(.automatic))
+        return (Double(viewmodel.pretotal)*1.25).formatted(.number.grouping(.automatic))
     }
     
     var body: some View {
@@ -67,7 +67,7 @@ struct CartView: View {
                 Text("Subtotal: $" + pretotalPrice + "  ")
                     .frame(maxWidth: .infinity, alignment: .trailing).padding(7)
                 Spacer()
-                Text("Delivery cost: $" + deliveryCost + "  ")
+                Text("Delivery service: $" + deliveryCost + "  ")
                     .frame(maxWidth: .infinity, alignment: .trailing).padding(7)
                 Spacer()
                 Divider()

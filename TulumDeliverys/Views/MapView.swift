@@ -10,12 +10,9 @@ import MapKit
 
 struct MapView: View {
     @State var viewmodel: MyViewModel
-    // Instancia de nuestro gestor de ubicación.
     @StateObject private var locationManager = LocationManager()
     @Environment(\.dismiss) var dismiss
-    // Estado para controlar la posición de la cámara del mapa.
     @State private var cameraPosition: MapCameraPosition = .automatic
-    // Estado para manejar la alerta.
     @State private var showPermissionAlert = false
     @State private var alertMessage = ""
     @State private var coordinateG: CLLocationCoordinate2D?
@@ -26,23 +23,8 @@ struct MapView: View {
     var body: some View {
         VStack{
             Divider()
-            Text("Step 3. Confirm your delivery place and select a payment method.").font(.system(size: 20))//.background(Color(.gray))
+            Text(viewmodel.isDelivery ? "Step 4. Wait for your stuff and confirm delivery reception." : "Step 3. Confirm your delivery place and select a payment method.").font(.system(size: 20))//.background(Color(.gray))
             Divider()
-            .toolbar{
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Label("Back", systemImage: "arrowshape.turn.up.left.fill")
-                    }.tint(Color.yellow)
-                }
-               /* ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: MapView(viewmodel: viewmodel).navigationBarBackButtonHidden(true)) {
-                        ConfirmView(vm: viewmodel)
-                    }
-                }*/
-            }.toolbarBackground(Color.black.opacity(0.99), for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
             ZStack{
                 Map(position: $cameraPosition) {
                     UserAnnotation()
@@ -87,10 +69,45 @@ struct MapView: View {
                 } message: {
                     Text(alertMessage)
                 }
+                if viewmodel.isDelivery {
+                VStack{
+                    Button {
+                        viewmodel.cancelDelivery()
+                        dismiss()
+                    } label: {
+                        Label("Confirm reception", systemImage: "checkmark.seal.fill")
+                            .padding()
+                            .foregroundStyle(.yellow)
+                            .background(.black)
+                            .cornerRadius(20)
+                    }
+                    Button {
+                        viewmodel.confirmDelivery()
+                        dismiss()
+                    } label: {
+                        Label("Cancel order", systemImage: "trash.fill")
+                            .padding()
+                            .foregroundStyle(.yellow)
+                            .background(.black)
+                            .cornerRadius(20)
+                    }
+                    Button {
+                        openSomeUrl(s: "https://api.whatsapp.com/send?phone=525621001774&text=Hi.%20I%20need%20help%20with%20my%20order:%20"+viewmodel.deliveryId)
+                    } label: {
+                        Label("Call support", systemImage: "phone.circle")
+                            .padding()
+                            .foregroundStyle(.yellow)
+                            .background(.black)
+                            .cornerRadius(20)
+                    }
+                }.frame(maxHeight: .infinity, alignment: .bottom)
+                }
+                if !viewmodel.isDelivery {
                 VStack{
                     Button {
                         pMethod="Cash"
                         openSomeUrl(s: "https://api.whatsapp.com/send?phone=525621001774&text=Hi.%20My%20order%20Id%20is:%20"+viewmodel.deliveryId+"%20I%20would%20like%20to%20pay%20with%20"+pMethod)
+                        viewmodel.setDelivery()
                     } label: {
                         Label("Cash (Mexican Peso)", systemImage: "dollarsign")
                             .padding()
@@ -101,6 +118,7 @@ struct MapView: View {
                     Button {
                         pMethod="CreditCard"
                         openSomeUrl(s: "https://api.whatsapp.com/send?phone=525621001774&text=Hi.%20My%20order%20Id%20is:%20"+viewmodel.deliveryId+"%20I%20would%20like%20to%20pay%20with%20"+pMethod)
+                        viewmodel.setDelivery()
                     } label: {
                         Label("Credit Card (Visa/MasterCard/Amex)", systemImage: "creditcard.viewfinder")
                             .padding()
@@ -111,6 +129,7 @@ struct MapView: View {
                     Button {
                         pMethod="WireTransfer"
                         openSomeUrl(s: "https://api.whatsapp.com/send?phone=525621001774&text=Hi.%20My%20order%20Id%20is:%20"+viewmodel.deliveryId+"%20I%20would%20like%20to%20pay%20with%20"+pMethod)
+                        viewmodel.setDelivery()
                     } label: {
                         Label("Wire transfer (SPEI)", systemImage: "iphone.gen2.radiowaves.left.and.right")
                             .padding()
@@ -121,6 +140,7 @@ struct MapView: View {
                     Button {
                         pMethod="Crypto"
                         openSomeUrl(s: "https://api.whatsapp.com/send?phone=525621001774&text=Hi.%20My%20order%20Id%20is:%20"+viewmodel.deliveryId+"%20I%20would%20like%20to%20pay%20with%20"+pMethod)
+                        viewmodel.setDelivery()
                     } label: {
                         Label("Crypto (BTC/USDT)", systemImage: "bitcoinsign.arrow.circlepath")
                             .padding()
@@ -129,10 +149,28 @@ struct MapView: View {
                             .cornerRadius(20)
                     }.padding(.bottom, 15)
                 }.frame(maxHeight: .infinity, alignment: .bottom)
+                }
             }
-            Text("Send to:  \(adressText)")//.background(Color(.gray))
-            Text("Delivery time: ~20 mins")
+            Text(viewmodel.isDelivery ? "Your delivery is on its way" : "Send to:  \(adressText)")//.background(Color(.gray))
+            Text("Delivery time: ~\(String(viewmodel.timeLeft)) mins")
         }
+        .toolbar{
+            ToolbarItem(placement: .topBarLeading) {
+                if !viewmodel.isDelivery{
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Label("Back", systemImage: "arrowshape.turn.up.left.fill")
+                    }.tint(Color.yellow)
+                }
+            }
+           /* ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(destination: MapView(viewmodel: viewmodel).navigationBarBackButtonHidden(true)) {
+                    ConfirmView(vm: viewmodel)
+                }
+            }*/
+        }.toolbarBackground(Color.black.opacity(0.99), for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
    }
     
     func openSomeUrl(s: String) {
