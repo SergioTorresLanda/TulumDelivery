@@ -20,13 +20,15 @@ final class Item {
     var price: Int
     var category:String
     var selectedItems:Int
+    var active:Bool
 
-    init(id:String, name:String, image:String, price:Int, category:String) {
+    init(id:String, name:String, image:String, price:Int, category:String, active:Bool) {
         self.id = id
         self.name = name
         self.image = image
         self.price = price
         self.category = category
+        self.active = active
         isFavorite = false
         selectedItems=0
     }
@@ -34,10 +36,11 @@ final class Item {
 
 struct Item2: Codable, Identifiable { // Identifiable es bueno para SwiftUI
     @DocumentID var id: String? // Mapea automáticamente el ID del documento
-    var name: String
-    var image: String
-    var price: Int
-    var category:String
+    var name: String?
+    var image: String?
+    var price: Int?
+    var category:String?
+    var active:Bool?
 }
 
 struct User {

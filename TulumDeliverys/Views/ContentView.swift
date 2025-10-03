@@ -8,23 +8,33 @@
 import SwiftUI
 import SwiftData
 
+enum Route {
+    case cart
+    case map
+}
+let screenW = UIScreen.main.bounds.width
+let screenH = UIScreen.main.bounds.width
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext //Capa entre los objetos y la memoria.
     @State private var viewmodel: MyViewModel? //opcional por ser "late init"
-    //@State private var navigateToCart = false
-
+    @State var route : [Route] = []
     var body: some View {
         ZStack{
             if let vm = viewmodel {
                 if vm.isLoading{
                     ProgressView()
                 }else{
-                    NavigationView {
+                    //NavigationStack(path: $route) {
                     //NavigationStack {
+                    NavigationView {
                         VStack{
                             HStack{
                                 Spacer()
-                                Text("Aldea Tulum Deliverys").font(.system(size: 25)).bold()
+                                Text("Aldea Tulum Deliverys")
+                                    .font(.system(size: 25))
+                                    .foregroundColor(Color.yellow)
+                                    .bold()
                                 Spacer()
                                 Spacer()
                                 Spacer()
@@ -33,11 +43,6 @@ struct ContentView: View {
                                     .toolbar(.hidden, for: .navigationBar)) {
                                     ButtonView(vm: vm)
                                 }
-                               /* Button {
-                                    navigateToCart = true
-                                } label: {
-                                    ButtonView(vm: vm)
-                                }*/
                                 Spacer()
                             }
                             Spacer()
@@ -53,19 +58,62 @@ struct ContentView: View {
                                 .listRowSeparator(.hidden)
                             }
                             .listStyle(.plain)
+                            .refreshable {
+                                mainTask()
+                            }
+                            if vm.totalItems > 0 {
+                                HStack {
+                                    Spacer()
+                                    Button {
+                                        vm.deleteAllSelected()
+                                    } label: {
+                                        Label("Clear", systemImage: "cart.badge.minus.fill")                                           .font(.system(size: 20))
+                                            .padding()
+                                            .foregroundStyle(.red)
+                                            .background(.black)
+                                            .cornerRadius(20)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(Color.red, lineWidth: 1)
+                                            )
+                                    }
+                                    .padding(.trailing, 20)
+                                    Spacer()
+                                    NavigationLink(destination: CartView(viewmodel: vm)
+                                       .navigationBarBackButtonHidden(true)
+                                       .toolbar(.hidden, for: .navigationBar)) {
+                                           HStack{
+                                               Label("Checkout", systemImage: "rectangle.portrait.and.arrow.forward.fill")
+                                               .padding(16)
+                                               .frame(maxWidth: .infinity)
+                                               .background(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .fill(Color.black)
+                                               )
+                                               .font(.system(size: 20))
+                                               .foregroundStyle(Color.yellow)
+                                               .overlay(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(Color.yellow, lineWidth: 1)
+                                               )
+                                           }
+                                   }
+                                    Spacer()
+                                }
+                               .padding(.horizontal, 10)
+                            }
                            
                         }.padding(.top, 1)
-                        /*.navigationDestination(isPresented: $navigateToCart) {
-                            CartView(viewmodel: vm).navigationBarBackButtonHidden(true)
-                        }*/
+                       /* .navigationDestination(for: Route.self) { path in
+                            switch path{
+                            case .cart:
+                                CartView(viewmodel: vm)
+                            case .map:
+                                MapView(viewmodel: vm)
+                            }
+                         }*/
                     }
                 }
-            }
-        }.task {//trabajo asyncrono se usará el patrón (async/await) en lugar de completion handlers (@escaping).
-            do {
-                try await viewmodel?.fetchData()
-            } catch {
-                print (error)
             }
         }
         .onAppear{
@@ -79,29 +127,42 @@ struct ContentView: View {
                     )
                 )
             }
+            mainTask()
         }
         .onDisappear{
             //manejar la desaparicion de la vista (similar a viewDidDissapear en controllers)
         }
     }
     
+    func mainTask(){
+        Task{
+            do {
+                try await viewmodel?.fetchData()
+            } catch {
+                print (error)
+            }
+        }
+    }
     
 }
 
 struct ButtonView: View {
     var vm: MyViewModel
     var body: some View {
-        HStack{
+        HStack(spacing: 0) {
             Image(systemName: "cart.fill").frame(alignment: .trailing).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
-            Text((String(vm.totalItems)+"    ")).font(.system(size: 20)).frame(alignment: .leading)
+            if vm.totalItems ?? 0 > 0 {
+                Text((String(vm.totalItems)+"    ")).font(.system(size: 20)).frame(alignment: .leading)
                 //.background(Color.blue)
-                .foregroundColor(Color.yellow)
+                    .foregroundColor(Color.yellow)
+            }
         }
-        .border(.yellow, width: 1)
+        //.border(.yellow, width: 1)
         //.cornerRadius(10)
-        .clipped()
+        //.clipped()
     }
 }
+
 
 #Preview {
     do {
@@ -114,13 +175,6 @@ struct ButtonView: View {
     }
 }
 
-/*List{
-    ForEach(vm.products, id: \.id) { prod in
-        ProductView(product: prod, viewmodel: vm)
-    }
-    .listRowSeparator(.hidden)
-}
-.listStyle(.plain)*/
 extension String: @retroactive Identifiable {
     public typealias ID = Int
     public var id: Int {

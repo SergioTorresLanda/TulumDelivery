@@ -8,12 +8,7 @@ import Foundation
 import SwiftData
 
 protocol LocalDataSourceProtocol {
-    func insertOrUpdate(products: [Item]) throws
-    func addFavorite(_ product: Item) throws
-    func removeFavorite(_ product: Item) throws
     func deleteAmiibos(at offsets: IndexSet, in products: [Item]) throws
-    func deleteFavorite(id: String, in favs: [Item]) throws
-    func deleteFavorites(at offsets: IndexSet, in favs: [Item]) throws
     func getProducts(isFavorite: Bool) throws -> [Item]
 }
 
@@ -55,17 +50,10 @@ class LocalDataSource: LocalDataSourceProtocol {
     }
 
     func addFavorite(_ product: Item) throws {
-        if !product.isFavorite{
+        if !product.isFavorite {
             product.isFavorite = true
         }
         product.selectedItems+=1
-    }
-    
-    func removeFavorite(_ product: Item) throws {
-        if product.selectedItems == 1 {
-            product.isFavorite=false
-        }
-        product.selectedItems-=1
     }
     
     func deleteAmiibos(at offsets: IndexSet, in products: [Item]) throws {
@@ -75,26 +63,8 @@ class LocalDataSource: LocalDataSourceProtocol {
         //try modelContext.save() no necesario
     }
     
-    func deleteFavorite(id: String, in favs: [Item]) throws {
-        if let prodToDelete = favs.first(where: { $0.id == id }) {
-        modelContext.delete(prodToDelete)
-      }
-    //try modelContext.save() no necesario
-    }
-    
-    func deleteFavorites(at offsets: IndexSet, in favs: [Item]) throws {
-        for index in offsets {
-           // modelContext.delete(favs[index])
-            if favs[index].selectedItems == 1 {
-                favs[index].isFavorite=false
-            }
-            favs[index].selectedItems-=1
-        }
-    //try modelContext.save() no necesario
-    }
-    
     func getProducts(isFavorite: Bool) throws -> [Item] {
          let descriptor = FetchDescriptor<Item>(predicate: #Predicate { $0.isFavorite == isFavorite }, sortBy: [SortDescriptor(\.name)])
          return try modelContext.fetch(descriptor)
-     }
+    }
 }

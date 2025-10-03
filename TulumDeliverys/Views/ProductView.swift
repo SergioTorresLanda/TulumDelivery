@@ -21,7 +21,6 @@ struct ProductView: View {
             }
             .frame(width: 90, height: 90)
             .clipShape(.rect(cornerRadius: 25))
-            Spacer()
             Text(product.name).bold().lineLimit(2).multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -31,21 +30,27 @@ struct ProductView: View {
             HStack{
                 Button{
                     if favCount>0{
-                        viewmodel.removeFavorite(with: product)
+                        withAnimation(.easeOut(duration: 0.5)){
+                            viewmodel.removeFavorite(with: product)
+                        }
                         favCount-=1
                     }
                 } label: {
-                    Image(systemName: "minus.rectangle.fill")
-                }//.background(Color.yellow)
-                    .foregroundColor(Color.yellow)
-                Text(String(favCount))
+                    Image(systemName: "minus.circle").resizable()
+                }
+                .foregroundColor(Color.yellow)
+                .frame(width: 25, height: 25)
+                Text(String(favCount)).foregroundColor(Color.yellow).bold()
                 Button{
-                    viewmodel.addFavoriteToSD(with: product)
+                    withAnimation(.easeIn(duration: 0.5)){
+                        viewmodel.addFavorite(with: product)
+                    }
                     favCount+=1
                 } label: {
-                    Image(systemName: "plus.rectangle.fill")
-                }//.background(Color.gray)
+                    Image(systemName: "plus.circle").resizable()
+                }
                 .foregroundColor(Color.yellow)
+                .frame(width: 25, height: 25)
             }
         }
         .frame(maxWidth: 120, alignment: .leading)
@@ -54,7 +59,13 @@ struct ProductView: View {
                     in: RoundedRectangle(cornerRadius: 10,
                                          style: .continuous))
         .listRowSeparator(.hidden)
+        .onChange(of: viewmodel.deleteAll){ v in
+            if v {
+                favCount = 0
+            }
+        }
     }
+        
 }
 
 /*

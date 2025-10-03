@@ -33,7 +33,7 @@ struct MapView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Label("Back", systemImage: "arrow.left.circle")
+                        Label("Back", systemImage: "arrowshape.turn.up.left.fill")
                     }.tint(Color.yellow)
                 }
                /* ToolbarItem(placement: .topBarTrailing) {
@@ -41,7 +41,8 @@ struct MapView: View {
                         ConfirmView(vm: viewmodel)
                     }
                 }*/
-            }
+            }.toolbarBackground(Color.black.opacity(0.99), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             ZStack{
                 Map(position: $cameraPosition) {
                     UserAnnotation()
@@ -62,7 +63,7 @@ struct MapView: View {
                     if let coordinate = newValue?.coordinate {
                         print("Centrando mapa en la nueva ubicación: \(coordinate)")
                         cameraPosition = .camera(
-                            MapCamera(centerCoordinate: coordinate, distance: 2000) // Zoom de 2km
+                            MapCamera(centerCoordinate: coordinate, distance: 1000) // Zoom de 2km
                         )
                         getAddressFromLatLon(coor:coordinate)
                     }
@@ -126,10 +127,11 @@ struct MapView: View {
                             .foregroundStyle(.yellow)
                             .background(.black)
                             .cornerRadius(20)
-                    }
+                    }.padding(.bottom, 15)
                 }.frame(maxHeight: .infinity, alignment: .bottom)
             }
             Text("Send to:  \(adressText)")//.background(Color(.gray))
+            Text("Delivery time: ~20 mins")
         }
    }
     

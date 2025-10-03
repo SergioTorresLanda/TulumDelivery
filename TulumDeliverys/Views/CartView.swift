@@ -31,27 +31,27 @@ struct CartView: View {
                 Text("Step 2. Confirm your Cart items and your total bill.").font(.system(size: 20))
                 Divider()
                 Spacer()
-                Text("*You can edit your Cart and remove some stuff by swiping to the left on each item.").font(.system(size: 10))
+                //Text("*You can edit your Cart and remove some stuff by swiping to the left on each item.").font(.system(size: 10))
                 List{
-                    ForEach(viewmodel.selected, id: \.id) { item in
-                        CartItemView(product: item,
-                                     viewmodel: viewmodel
-                        )
+                    ForEach(viewmodel.products, id: \.id) { item in
+                        if item.isFavorite{
+                            CartItemView(product: item,
+                                         viewmodel: viewmodel
+                            )
+                        }
                     }
-                    .onDelete { indexSet in
+                   /* .onDelete { indexSet in
                         viewmodel.deleteFavoriteFromIndex(at: indexSet)
-                    }
+                    }*/
                     .listRowSeparator(.hidden)
                 }
                 .listStyle(.plain)
-                // .navigationTitle("Step 2. Confirm your Cart items and select payment method.")
-                // .navigationBarTitleDisplayMode(.large)
                 .toolbar{
                     ToolbarItem(placement: .topBarLeading) {
                         Button(action: {
                             dismiss()
                         }) {
-                            Label("Back", systemImage: "arrow.left.circle")
+                            Label("Back", systemImage: "arrowshape.turn.up.left.fill")
                         }.tint(Color.yellow)
                     }
                     ToolbarItem(placement: .topBarTrailing) {
@@ -61,9 +61,6 @@ struct CartView: View {
                         } label: {
                             ConfirmView(vm: viewmodel, total: total)
                         }
-                        /*NavigationLink(destination: MapView(viewmodel: viewmodel).navigationBarBackButtonHidden(true)) {
-                            ConfirmView(vm: viewmodel, total: total)
-                        }*/
                     }
                 }
                 Divider()
@@ -94,9 +91,9 @@ struct ConfirmView: View {
 
     var body: some View {
         HStack{
-            Image(systemName: "checkmark.seal.fill").frame(width: 50, height: 50, alignment: .center).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
-            Text("OK").font(.system(size: 20)).bold()
-                .foregroundColor(Color.yellow)
+            Image(systemName: "arrowshape.turn.up.right.fill").frame(width: 50, height: 50, alignment: .trailing).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
+            //Text("").font(.system(size: 20)).bold()
+               // .foregroundColor(Color.yellow)
         }
     }
 }

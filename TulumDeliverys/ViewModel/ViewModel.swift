@@ -13,25 +13,26 @@ import FirebaseFirestore
 @Observable
 final class MyViewModel {
     private let db = Firestore.firestore()
-    private let repository: ProductRepositoryProtocol // Injeccion de dependencia abstracta
-    var products: [Item] = [] //Data pública guardada localmente listos para presentar a la vista
+    private let repository: ProductRepositoryProtocol
+    var products: [Item] = []
     var categorys: Set<String> = []
-    var selected: [Item] = [] //Productos seleccionados guardados localmente listos para presentar a la vista
     var pretotal:Int = 0
     var totalItems = 0
     var deliveryId = ""
+    var rds = RemoteDataSource()
     private(set) var isLoading = false //propiedad para menejar el estado del ActivityIndicator (en la vista)
-    
+    private(set) var deleteAll = false
     //Se inyecta el contexto al inicializarse el viewmodel
     init(repository:ProductRepositoryProtocol) {
          self.repository = repository
-         fetchProducts() //recuperar Data offline
      }
     
     func writeDeliveryOrder(total:String){
         var dictProds:[String:Any] = [:]
-        for prod in selected{
-            dictProds[prod.name]=prod.selectedItems
+        for prod in products {
+            if prod.isFavorite {
+                dictProds[prod.name] = prod.selectedItems
+            }
         }
         let dict:[String:Any] = ["usuario":UUID().uuidString,
                                  "timestampServer":FieldValue.serverTimestamp(),
@@ -46,60 +47,79 @@ final class MyViewModel {
             } else {
                 //self.db.collection("usuarios").document(self.id!).collection("deliverys").document(ref!.documentID).setData(dict)
                 print("Document added with ID: \(ref!.documentID)")
-                self.deliveryId=ref!.documentID
+                self.deliveryId = ref!.documentID
             }
         }
     }
     
     func fetchData() async throws {
        isLoading = true
+        categorys=[]
+        products=[]
        defer { isLoading = false }
-       try await repository.fetchAndPersistProducts()
-       fetchProducts()
-       fetchFavs() // Actualizar las listas del Viewmodel despues de guardarlas la data localmente.
-   }
-    // MARK: Actualizar la propiedad que vera la vista, usando de la data guardada en local como fuente de verdad.
-    func fetchProducts() {
-        do {
-            products = try repository.getProducts(isFavorite: false)
-            for prod in products{
-                categorys.insert(prod.category)
-            }
-        } catch {
-            print("Fallo la busqueda de Productos: \(error.localizedDescription)")
-            products = []
-        }
+       try await fetchAndPersistProducts()
     }
-    func fetchFavs() {
-        pretotal=0
-        totalItems=0
-        do {
-            selected = try repository.getProducts(isFavorite: true)
-            for s in selected {
-                pretotal+=s.selectedItems*s.price
-                totalItems+=s.selectedItems
+    
+    func fetchAndPersistProducts() async throws {
+        categorys=[]
+        products=[]
+        let api = try await rds.fetchProductsFromAPI()
+        var itemss: [Item] = []
+        for prod in api {
+            if prod.active ?? true {
+                let item = Item(id: prod.id ?? UUID().uuidString,
+                                name: prod.name ?? "--",
+                                image: prod.image ?? "--",
+                                price: prod.price ?? 0,
+                                category: prod.category ?? "--",
+                                active: prod.active ?? true
+                )
+                categorys.insert(prod.category ?? "ARTESANAL")
+                itemss.append(item)
+            }else{
+                print(prod.name)
             }
-        } catch {
-            print("Fallo la busqueda de Seleccionados: \(error.localizedDescription)")
-            selected = []
+        }
+        products = itemss
+    }
+    
+    func addFavorite(with p: Item){
+        p.isFavorite = true
+        p.selectedItems+=1
+        pretotal += p.price
+        totalItems += 1
+    }
+
+    func removeFavorite(with p: Item) {
+        if p.selectedItems == 1 {
+            p.isFavorite=false
+        }
+        p.selectedItems-=1
+        pretotal -= p.price
+        totalItems -= 1
+    }
+    
+    func deleteAllSelected(){
+        products.forEach { p in
+            p.isFavorite = false
+            p.selectedItems = 0
+        }
+        pretotal = 0
+        totalItems = 0
+        deleteAll = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.deleteAll = false
         }
     }
     
-    // MARK: PERSISTENCIA DE FAVORITOS
-    //Agregar favoritos
-    func addFavoriteToSD(with product: Item){
-        repository.addFavorite(product)
-        fetchFavs()
-    }
-    // Eliminar de favoritos desde la lista general (boton favorito)
-    func removeFavorite(with product: Item) {
-        repository.removeFavorite(product)
-        fetchFavs()
-    }
-    // Eliminar de favoritos desde la lista de favoritos (accion de eliminar)
     func deleteFavoriteFromIndex(at offsets: IndexSet) {
-        repository.deleteFavorites(at: offsets, in: selected)
-        fetchFavs()
+       /* for index in offsets {
+           // modelContext.delete(favs[index])
+            if selected[index].selectedItems == 1 {
+                favs[index].isFavorite=false
+            }
+            favs[index].selectedItems-=1
+        }*/
     }
 
 }
