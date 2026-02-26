@@ -16,128 +16,107 @@ let screenW = UIScreen.main.bounds.width
 let screenH = UIScreen.main.bounds.width
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext //Capa entre los objetos y la memoria.
-    @State private var viewmodel: MyViewModel? //opcional por ser "late init"
+    @EnvironmentObject var vm : MyViewModel
+    @EnvironmentObject var coordinator: AppCoordinator
     @State var route : [Route] = []
     var body: some View {
         ZStack{
-            if let vm = viewmodel {
-                if vm.isLoading{
-                    ProgressView()
-                }else{
-                    //NavigationStack(path: $route) {
-                    //NavigationStack {
-                    NavigationView {
-                        VStack{
-                            HStack{
-                                Spacer()
-                                Text("Aldea Tulum Deliverys")
-                                    .font(.system(size: 25))
-                                    .foregroundColor(Color.yellow)
-                                    .bold()
-                                Spacer()
-                                Spacer()
-                                Spacer()
-                                NavigationLink(destination: CartView(viewmodel: vm)
-                                    .navigationBarBackButtonHidden(true)
-                                    .toolbar(.hidden, for: .navigationBar)) {
-                                    ButtonView(vm: vm)
-                                }
-                                Spacer()
+            if vm.isLoading{
+                ProgressView()
+            }else{
+                NavigationView {
+                    VStack{
+                        HStack{
+                            Spacer()
+                            Text("Aldea Tulum Deliverys")
+                                .font(.system(size: 25))
+                                .foregroundColor(Color.yellow)
+                                .bold()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Button {
+                                coordinator.push(.cart)
+                            } label: {
+                                ButtonView()
                             }
                             Spacer()
-                            Divider()
-                            Text("Step 1. Add some stuff to your cart.").font(.system(size: 20))
-                            Text("Products available:  \(vm.products.count)").font(.system(size: 10))
-                            //.foregroundColor(Color.yellow)
-                            Divider()
-                            List{
-                                ForEach(Array(vm.categorys)) { cat in
-                                    MainHCollectionView(products: vm.products.filter{$0.category == cat}, category: cat.uppercased(), vm: vm)
+                        }
+                        Spacer()
+                        Divider()
+                        Text("Step 1. Add some stuff to your cart.").font(.system(size: 20))
+                        Text("Products available:  \(vm.products.count)").font(.system(size: 10))
+                        //.foregroundColor(Color.yellow)
+                        Divider()
+                        List{
+                            ForEach(Array(vm.categorys)) { cat in
+                                MainHCollectionView(products: vm.products.filter{$0.category == cat}, category: cat.uppercased())
+                            }
+                            .listRowSeparator(.hidden)
+                        }
+                        .listStyle(.plain)
+                        .refreshable {
+                            mainTask()
+                        }
+                        if vm.totalItems > 0 {
+                            HStack {
+                                Spacer()
+                                Button {
+                                    vm.deleteAllSelected()
+                                } label: {
+                                    Label("Clear", systemImage: "cart.badge.minus.fill")                                           .font(.system(size: 20))
+                                        .padding()
+                                        .foregroundStyle(.red)
+                                        .background(.black)
+                                        .cornerRadius(20)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.red, lineWidth: 1)
+                                        )
                                 }
-                                .listRowSeparator(.hidden)
-                            }
-                            .listStyle(.plain)
-                            .refreshable {
-                                mainTask()
-                            }
-                            if vm.totalItems > 0 {
-                                HStack {
-                                    Spacer()
-                                    Button {
-                                        vm.deleteAllSelected()
-                                    } label: {
-                                        Label("Clear", systemImage: "cart.badge.minus.fill")                                           .font(.system(size: 20))
-                                            .padding()
-                                            .foregroundStyle(.red)
-                                            .background(.black)
-                                            .cornerRadius(20)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .stroke(Color.red, lineWidth: 1)
-                                            )
+                                .padding(.trailing, 20)
+                                Spacer()
+                                Button {
+                                    coordinator.push(.cart)
+                                } label: {
+                                    HStack{
+                                        Label("Checkout", systemImage: "rectangle.portrait.and.arrow.forward.fill")
+                                        .padding(16)
+                                        .frame(maxWidth: .infinity)
+                                        .background(
+                                         RoundedRectangle(cornerRadius: 20)
+                                             .fill(Color.black)
+                                        )
+                                        .font(.system(size: 20))
+                                        .foregroundStyle(Color.yellow)
+                                        .overlay(
+                                         RoundedRectangle(cornerRadius: 20)
+                                             .stroke(Color.yellow, lineWidth: 1)
+                                        )
                                     }
-                                    .padding(.trailing, 20)
-                                    Spacer()
-                                    NavigationLink(destination: CartView(viewmodel: vm)
-                                       .navigationBarBackButtonHidden(true)
-                                       .toolbar(.hidden, for: .navigationBar)) {
-                                           HStack{
-                                               Label("Checkout", systemImage: "rectangle.portrait.and.arrow.forward.fill")
-                                               .padding(16)
-                                               .frame(maxWidth: .infinity)
-                                               .background(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .fill(Color.black)
-                                               )
-                                               .font(.system(size: 20))
-                                               .foregroundStyle(Color.yellow)
-                                               .overlay(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .stroke(Color.yellow, lineWidth: 1)
-                                               )
-                                           }
-                                   }
-                                    Spacer()
                                 }
-                               .padding(.horizontal, 10)
+                    
+                                Spacer()
                             }
-                           
-                        }.padding(.top, 1)
-                       /* .navigationDestination(for: Route.self) { path in
-                            switch path{
-                            case .cart:
-                                CartView(viewmodel: vm)
-                            case .map:
-                                MapView(viewmodel: vm)
-                            }
-                         }*/
-                    }
+                           .padding(.horizontal, 10)
+                        }
+                    }.padding(.top, 1)
                 }
             }
         }
         .onAppear{
-            if viewmodel == nil {
-                // Inicializar solo una vez todo el esquema del ViewModel usando la variable ambiental "modelContext"
-                viewmodel = MyViewModel(
-                    repository: Repository(
-                        remoteDataSource: RemoteDataSource(),
-                        localDataSource: LocalDataSource(
-                            modelContext: modelContext)
-                    )
-                )
+            if vm.products.isEmpty {
+                mainTask()
             }
-            mainTask()
         }
         .onDisappear{
-            //manejar la desaparicion de la vista (similar a viewDidDissapear en controllers)
         }
     }
     
     func mainTask(){
         Task{
             do {
-                try await viewmodel?.fetchData()
+                try await vm.fetchData()
             } catch {
                 print (error)
             }
@@ -147,11 +126,11 @@ struct ContentView: View {
 }
 
 struct ButtonView: View {
-    var vm: MyViewModel
+    @EnvironmentObject var vm : MyViewModel
     var body: some View {
         HStack(spacing: 0) {
             Image(systemName: "cart.fill").frame(alignment: .trailing).foregroundColor(Color.yellow).aspectRatio(contentMode: .fill)
-            if vm.totalItems ?? 0 > 0 {
+            if vm.totalItems > 0 {
                 Text((String(vm.totalItems)+"    ")).font(.system(size: 20)).frame(alignment: .leading)
                 //.background(Color.blue)
                     .foregroundColor(Color.yellow)

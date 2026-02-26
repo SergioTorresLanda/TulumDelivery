@@ -10,7 +10,7 @@ import SwiftUI
 struct MainHCollectionView: View {
     var products: [Item]
     var category: String
-    var vm: MyViewModel
+    @EnvironmentObject var vm : MyViewModel
     
     var body: some View {
         VStack(alignment: .leading){
@@ -22,7 +22,7 @@ struct MainHCollectionView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 15) { // Adjust spacing between items
                     ForEach(products, id: \.id) { prod in
-                        ProductView(product: prod, viewmodel: vm)
+                        ProductView(product: prod)
                     }
                 }
                 .padding(.horizontal) // Padding for the entire HStack within the ScrollView

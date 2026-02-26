@@ -23,24 +23,35 @@ struct TulumDeliverysApp: App {
     init(){
         FirebaseApp.configure()
     }
-    
-  /*  var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()*/
-
+    @StateObject private var coordinator = AppCoordinator()
+    @StateObject private var container = AppDependencyContainer()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack(path: $coordinator.path) {
+                ContentView()
+                    .navigationDestination(for: AppRoute.self) { route in
+                        ViewFactory.build(route: route, coordinator: coordinator, container: container)
+                    }
+            }
+            .modelContainer(container.modelContainer) // For @Query inside views
+            .environmentObject(container.sharedViewModel)
+            .environmentObject(coordinator)
         }
-       // .modelContainer(sharedModelContainer)
     }
 }
+
+
+/*  var sharedModelContainer: ModelContainer = {
+    let schema = Schema([
+        Item.self,
+    ])
+    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+
+    do {
+        return try ModelContainer(for: schema, configurations: [modelConfiguration])
+    } catch {
+        fatalError("Could not create ModelContainer: \(error)")
+    }
+}()
+ .modelContainer(sharedModelContainer)
+ */

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CartItemView: View {
     var product: Item
-    var viewmodel: MyViewModel
     
     var body: some View {
         HStack{

@@ -9,9 +9,10 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
-    @State var viewmodel: MyViewModel
+    @EnvironmentObject var viewmodel : MyViewModel
+    @EnvironmentObject var coordinator: AppCoordinator
     @StateObject private var locationManager = LocationManager()
-    @Environment(\.dismiss) var dismiss
+//    @Environment(\.dismiss) var dismiss
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var showPermissionAlert = false
     @State private var alertMessage = ""
@@ -72,8 +73,9 @@ struct MapView: View {
                 if viewmodel.isDelivery {
                 VStack{
                     Button {
-                        viewmodel.cancelDelivery()
-                        dismiss()
+                        viewmodel.deleteAllSelected()
+                        viewmodel.confirmDelivery()
+                        coordinator.push(.rate)
                     } label: {
                         Label("Confirm reception", systemImage: "checkmark.seal.fill")
                             .padding()
@@ -82,8 +84,9 @@ struct MapView: View {
                             .cornerRadius(20)
                     }
                     Button {
-                        viewmodel.confirmDelivery()
-                        dismiss()
+                        viewmodel.deleteAllSelected()
+                        viewmodel.cancelDelivery()
+                        coordinator.popToRoot()
                     } label: {
                         Label("Cancel order", systemImage: "trash.fill")
                             .padding()
@@ -158,7 +161,7 @@ struct MapView: View {
             ToolbarItem(placement: .topBarLeading) {
                 if !viewmodel.isDelivery{
                     Button(action: {
-                        dismiss()
+                        coordinator.pop()
                     }) {
                         Label("Back", systemImage: "arrowshape.turn.up.left.fill")
                     }.tint(Color.yellow)

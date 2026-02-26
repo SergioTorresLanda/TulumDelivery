@@ -8,9 +8,8 @@ import Foundation
 import SwiftUI
 
 struct ProductView: View {
+    @EnvironmentObject var vm : MyViewModel
     var product: Item
-    var viewmodel: MyViewModel
-    @State var favCount = 0
     
     var body: some View {
         VStack{
@@ -29,23 +28,21 @@ struct ProductView: View {
             Spacer()
             HStack{
                 Button{
-                    if favCount>0{
-                        withAnimation(.easeOut(duration: 0.5)){
-                            viewmodel.removeFavorite(with: product)
+                    if product.selectedItems>0{
+                        withAnimation(.easeOut(duration: 0.3)){
+                            vm.removeFavorite(with: product)
                         }
-                        favCount-=1
                     }
                 } label: {
                     Image(systemName: "minus.circle").resizable()
                 }
                 .foregroundColor(Color.yellow)
                 .frame(width: 25, height: 25)
-                Text(String(favCount)).foregroundColor(Color.yellow).bold()
+                Text(String(product.selectedItems)).foregroundColor(Color.yellow).bold()
                 Button{
-                    withAnimation(.easeIn(duration: 0.5)){
-                        viewmodel.addFavorite(with: product)
+                    withAnimation(.easeIn(duration: 0.3)){
+                        vm.addFavorite(with: product)
                     }
-                    favCount+=1
                 } label: {
                     Image(systemName: "plus.circle").resizable()
                 }
@@ -59,11 +56,6 @@ struct ProductView: View {
                     in: RoundedRectangle(cornerRadius: 10,
                                          style: .continuous))
         .listRowSeparator(.hidden)
-        .onChange(of: viewmodel.deleteAll){ v in
-            if v {
-                favCount = 0
-            }
-        }
     }
         
 }
