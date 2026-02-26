@@ -9,24 +9,65 @@ import SwiftUI
 import SwiftData
 
 protocol ProductRepositoryProtocol {
-    func deleteProducts(at offsets: IndexSet, in products: [Item])
-    func getProducts(isFavorite: Bool) throws -> [Item]
+    func fetchAndProcess() async throws -> ([Item], Set<String>)
 }
 
-class Repository: ProductRepositoryProtocol {
-    private let remoteDataSource: RemoteDataSourceProtocol
-    private let localDataSource: LocalDataSourceProtocol
+actor Repository: ProductRepositoryProtocol {
+    private let remote: RemoteDataSourceProtocol
+    private let local: any DataManagerProtocol
 
-    init(remoteDataSource: RemoteDataSourceProtocol, localDataSource: LocalDataSourceProtocol) {
-        self.remoteDataSource = remoteDataSource
-        self.localDataSource = localDataSource
+    init(remoteDataSource: RemoteDataSourceProtocol, localDataSource: any DataManagerProtocol) {
+        self.remote = remoteDataSource
+        self.local = localDataSource
     }
     
-    func deleteProducts(at offsets: IndexSet, in products: [Item]) {
-        try? localDataSource.deleteAmiibos(at: offsets, in: products)
+    // 2. This method runs on a background thread automatically!
+    func fetchAndProcess() async throws -> ([Item], Set<String>) {
+        
+        // A. Fetch raw data
+        let apiProducts = try await remote.fetchProductsFromAPI()
+        
+        // B. HEAVY WORK: The Loop happens here (Background)
+        var items: [Item] = []
+        var categories: Set<String> = []
+        
+        for prod in apiProducts {
+            guard prod.active ?? true else { continue }
+            
+            let item = Item(
+                id: prod.id ?? UUID().uuidString,
+                name: prod.name ?? "--",
+                image: prod.image ?? "--",
+                price: prod.price ?? 0,
+                category: prod.category ?? "--",
+                active: true
+            )
+            
+            categories.insert(prod.category ?? "ARTESANAL")
+            items.append(item)
+            // try await local.save(item)
+        }
+        // C. Persist all at once (Optional)
+        try await addTransaction(items: items)
+        
+        return (items, categories)
     }
     
-    func getProducts(isFavorite: Bool) throws -> [Item] {
-        return try localDataSource.getProducts(isFavorite: isFavorite)
-     }
+    func addTransaction(items: [Item]) async throws {
+        // 3. We await the abstract protocol method
+        try await local.save(items)
+    }
+    
+    func fetchActiveProducts() async throws -> [Item] {
+        // 1. Build the query configuration here
+        var descriptor = FetchDescriptor<Item>(
+            predicate: #Predicate { $0.isFavorite == true },
+            sortBy: [SortDescriptor(\.name)]
+        )
+        
+        // 2. Extra power! (You couldn't do this with Version A)
+        descriptor.fetchLimit = 50
+        
+        return try await local.fetch(descriptor)
+    }
 }

@@ -10,24 +10,75 @@ import SwiftData
 import SwiftUI
 import FirebaseFirestore
 
-@Observable
-final class MyViewModel {
+//@Observable
+@MainActor
+final class MyViewModel: ObservableObject {
     private let db = Firestore.firestore()
     private let repository: ProductRepositoryProtocol
-    var products: [Item] = []
-    var categorys: Set<String> = []
-    var pretotal:Int = 0
-    var totalItems = 0
-    var deliveryId = ""
-    var rds = RemoteDataSource()
-    private(set) var isLoading = false //propiedad para menejar el estado del ActivityIndicator (en la vista)
+    @Published var rateScreenComponents: [SDUIComponentWrapper] = []
+    @Published var products: [Item] = []
+    @Published var categorys: Set<String> = []
+    @Published var pretotal:Int = 0
+    @Published var totalItems = 0
+    @Published var deliveryId = ""
+    @Published private(set) var isLoading = false
+    @Published var image: UIImage?
+    private let cache = ImageDownloader()
     private(set) var deleteAll = false
     private(set) var isDelivery = false
     private(set) var timeLeft = 20
-    //Se inyecta el contexto al inicializarse el viewmodel
+
     init(repository:ProductRepositoryProtocol) {
          self.repository = repository
      }
+    
+    func fetchRateScreen() {
+
+        let jsonString = """
+        {
+          "screenTitle": "Dashboard",
+          "components": [
+            {
+              "type": "hero_card",
+              "data": {
+                "title": "Your Salary is Ready",
+                "amount": "$1,250.00",
+                "action_id": "cash_out_flow"
+              }
+            },
+            {
+              "type": "transaction_row",
+              "data": {
+                "merchant": "Uber Eats",
+                "date": "2024-02-20",
+                "amount": "-$24.50"
+              }
+            },
+            {
+              "type": "unknown_component",
+              "data": { "foo": "bar" }
+            }
+          ]
+        }
+        """
+        //Convert to Data
+        guard let data = jsonString.data(using: .utf8) else { return }
+        
+        do {
+            //Decode the Whole Response
+            let response = try JSONDecoder().decode(ScreenResponse.self, from: data)
+            
+            //Assign to Published Property (Main Thread)
+            DispatchQueue.main.async {
+                self.rateScreenComponents = response.components
+                // self.screenTitle = response.screenTitle
+            }
+            print("✅ Successfully decoded \(response.components.count) components")
+            
+        } catch {
+            print("❌ Decoding failed: \(error)")
+        }
+    }
     
     func confirmDelivery(){
         //TODO: add to DB confirmation
@@ -82,30 +133,12 @@ final class MyViewModel {
         categorys=[]
         products=[]
        defer { isLoading = false }
-       try await fetchAndPersistProducts()
-    }
-    
-    func fetchAndPersistProducts() async throws {
-        categorys=[]
-        products=[]
-        let api = try await rds.fetchProductsFromAPI()
-        var itemss: [Item] = []
-        for prod in api {
-            if prod.active ?? true {
-                let item = Item(id: prod.id ?? UUID().uuidString,
-                                name: prod.name ?? "--",
-                                image: prod.image ?? "--",
-                                price: prod.price ?? 0,
-                                category: prod.category ?? "--",
-                                active: prod.active ?? true
-                )
-                categorys.insert(prod.category ?? "ARTESANAL")
-                itemss.append(item)
-            }else{
-                print(prod.name)
-            }
-        }
-        products = itemss
+        // 1. Jump to Background Actor
+        let (newItems, newCategories) = try await repository.fetchAndProcess()
+        // 2. Back on Main Thread
+        // Update UI instantly with pre-processed data
+        self.products = newItems
+        self.categorys = newCategories
     }
     
     func addFavorite(with p: Item){
@@ -146,5 +179,72 @@ final class MyViewModel {
             favs[index].selectedItems-=1
         }*/
     }
+    
+    func loadImage(url: URL) {
+        Task {
+            print("Requesting image...")
+            defer{isLoading=false}
+            // 2. AWAIT: We pause here and send the job to the Background Actor.
+            // The Main Thread is now FREE to handle user touches while we wait.
+            let downloadedImage = await cache.fetchAndResize(url: url)
+            // 3. We are back on the Main Thread automatically!
+            self.image = downloadedImage
+        }
+    }
 
+    func fetchMoreData() async throws {
+        isLoading = true
+       // defer { isLoading = false }
+        // 1. "async let" starts the tasks IMMEDIATELY in the background.
+        // They are now running in parallel on available threads.
+       // async let photosTask = repository.fetchPhotos()
+       // async let videosTask = repository.fetchVideos()
+        
+        // ... You could do other work here while they download ...
+        // 2. The Suspension Point
+        // We pause here until BOTH tasks are finished.
+        // If either one throws an error, the other is automatically cancelled (Structured Concurrency).
+     //   let (newPhotos, newVideos) = try await (photosTask, videosTask)
+        
+        // 3. Atomic Update
+        // We only update the UI state once both have succeeded.
+       // self.photos = newPhotos
+        //self.videos = newVideos
+    }
+    
+    func fetchImagesSafely(urls: [URL]) async -> [UIImage] {
+        
+        // 1. Use a TaskGroup (Standard, not Throwing)
+        // We handle errors INSIDE, so the group itself never fails.
+        return await withTaskGroup(of: UIImage?.self) { group in
+            
+            var images: [UIImage] = []
+            images.reserveCapacity(urls.count)
+            
+            for url in urls {
+                group.addTask {
+                    // 2. The Safety Net (do-catch inside the task)
+                    // If this specific download fails, we catch it locally
+                    // and return nil, allowing the group to continue.
+                    do {
+                        let (data, _) = try await URLSession.shared.data(from: url)
+                        return UIImage(data: data)
+                    } catch {
+                        print("⚠️ Failed to load \(url): \(error)")
+                        return nil
+                    }
+                }
+            }
+            
+            // 3. Filter out failures
+            // The loop quietly ignores the nils and collects the successes.
+            for await result in group {
+                if let validImage = result {
+                    images.append(validImage)
+                }
+            }
+            
+            return images
+        }
+    }
 }

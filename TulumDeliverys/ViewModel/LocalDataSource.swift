@@ -4,67 +4,50 @@
 //
 //  Created by Sergio Torres Landa González on 10/06/25.
 //
-import Foundation
 import SwiftData
+import SwiftUI
 
-protocol LocalDataSourceProtocol {
-    func deleteAmiibos(at offsets: IndexSet, in products: [Item]) throws
-    func getProducts(isFavorite: Bool) throws -> [Item]
-}
+// 1. Define the capabilities
+protocol DataManagerProtocol: Sendable {
+    func save<T: PersistentModel>(_ item: T) async throws
+    func save<T: PersistentModel>(_ items: [T]) async throws
+    func delete<T: PersistentModel>(_ item: T) async throws
+    func fetch<T: PersistentModel>(_ descriptor: FetchDescriptor<T>) async throws -> [T]}
 
-class LocalDataSource: LocalDataSourceProtocol {
+// 1. The Actor enforces thread safety (Background work)
+@ModelActor
+actor DataManager: DataManagerProtocol {
     
-    private var modelContext: ModelContext
-    //referencia del contexto. Capa entre el almacén de persistencia y los objetos en la memoria.
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-
-    func insertOrUpdate(products: [Item]) throws {
-        for product in products {
-            // Check if an item with this ID already exists
-            let itemIdToMatch = product.id
-            let predicate = #Predicate<Item> { $0.id == itemIdToMatch }
-            var descriptor = FetchDescriptor(predicate: predicate)
-            descriptor.fetchLimit = 1
-
-            let existingItems = try modelContext.fetch(descriptor)
-
-            if existingItems.first != nil {
-                // Update existing item
-             //   existingItem.name = product.name
-           //     existingItem.image = product.image
-                // You might choose to keep isFavorite as is, or update based on your logic
-                // existingItem.isFavorite = product.isFavorite
-             //   print("Updated existing item: \(existingItem.name)")
-            } else {
-                // Insert new item
-                modelContext.insert(product)
-                print("Inserted new item: \(product.name)")
-            }
-        }
-        // Save the context if you're not doing auto-save, or if you need to ensure persistence immediately
-      // Note: In SwiftUI views with @Query, changes might be automatically saved.
-      // For standalone operations, explicitly saving might be necessary depending on your setup.
-        try modelContext.save() // Explicitly save changes
-    }
-
-    func addFavorite(_ product: Item) throws {
-        if !product.isFavorite {
-            product.isFavorite = true
-        }
-        product.selectedItems+=1
+    // The macro AUTOMATICALLY adds:
+        // var modelContainer: ModelContainer
+        // var modelExecutor: ModelExecutor
+        // init(modelContainer: ModelContainer) <--- This is generated
+    // T must conform to PersistentModel (the SwiftData protocol)
+    func save<T: PersistentModel>(_ item: T) throws {
+        // modelContext is automatically provided by @ModelActor
+        modelContext.insert(item)
+        try modelContext.save()
     }
     
-    func deleteAmiibos(at offsets: IndexSet, in products: [Item]) throws {
-        for index in offsets {
-            modelContext.delete(products[index])
+    func save<T>(_ items: [T]) async throws where T : PersistentModel {
+        for item in items {
+            modelContext.insert(item)
         }
-        //try modelContext.save() no necesario
+        try modelContext.save()
     }
     
-    func getProducts(isFavorite: Bool) throws -> [Item] {
-         let descriptor = FetchDescriptor<Item>(predicate: #Predicate { $0.isFavorite == isFavorite }, sortBy: [SortDescriptor(\.name)])
-         return try modelContext.fetch(descriptor)
+    func fetch<T: PersistentModel>(_ descriptor: FetchDescriptor<T>) async throws -> [T] {
+        return try modelContext.fetch(descriptor)
+    }
+    
+    // MARK: - Generic Delete
+    func delete<T: PersistentModel>(_ item: T) throws {
+        modelContext.delete(item)
+        try modelContext.save()
+    }
+    
+    // MARK: - Batch Delete (Advanced)
+    func deleteAll<T: PersistentModel>(_ modelType: T.Type) throws {
+        try modelContext.delete(model: T.self)
     }
 }

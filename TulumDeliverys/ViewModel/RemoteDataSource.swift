@@ -12,9 +12,8 @@ protocol RemoteDataSourceProtocol {
     func fetchProductsFromAPI() async throws -> [Item2]
 }
 
-class RemoteDataSource: RemoteDataSourceProtocol {
+struct RemoteDataSource: RemoteDataSourceProtocol {
     private let db = Firestore.firestore()
-    
     private let apiURL = URL(string: "https://www.amiiboapi.com/api/amiibo/")
     
     func fetchProductsFromAPI() async throws -> [Item2] {
