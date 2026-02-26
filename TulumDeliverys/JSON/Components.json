@@ -1,0 +1,26 @@
+
+{
+  "screenTitle": "Dashboard",
+  "components": [
+    {
+      "type": "hero_card",
+      "data": {
+        "title": "Your Salary is Ready",
+        "amount": "$1,250.00",
+        "action_id": "cash_out_flow"
+      }
+    },
+    {
+      "type": "transaction_row",
+      "data": {
+        "merchant": "Uber Eats",
+        "date": "2024-02-20",
+        "amount": "-$24.50"
+      }
+    },
+    {
+      "type": "unknown_component",
+      "data": { "foo": "bar" }
+    }
+  ]
+}
