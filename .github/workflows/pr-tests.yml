@@ -11,7 +11,7 @@ jobs:
     name: Run Unit and UI Tests
     # 2. The Environment: You must use a macOS runner. 
     # macos-14 gives you Xcode 15+ and iOS 17 (needed for your SwiftData architecture).
-    runs-on: macos-14 
+    runs-on: macos-15 
 
     steps:
       # Step A: Download your code onto the GitHub Mac server
@@ -19,8 +19,8 @@ jobs:
         uses: actions/checkout@v4
 
       # Step B: Select the correct Xcode version (Optional, but good practice for consistency)
-      - name: Select Xcode 15.2
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      - name: Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
 
       # Step C: The actual test execution
       # We use 'set -o pipefail' so if the tests fail, the GitHub Action actually turns RED. 
