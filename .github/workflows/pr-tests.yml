@@ -1,0 +1,44 @@
+name: iOS PR Tests
+
+# 1. The Trigger: This tells GitHub to run this workflow ONLY when a Pull Request is opened or updated against the 'main' branch.
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: Run Unit and UI Tests
+    # 2. The Environment: You must use a macOS runner. 
+    # macos-14 gives you Xcode 15+ and iOS 17 (needed for your SwiftData architecture).
+    runs-on: macos-15 
+
+    steps:
+      # Step A: Download your code onto the GitHub Mac server
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+        # Step B: The "Staff Level" Cache
+      - name: Cache Swift Package Manager dependencies
+        uses: actions/cache@v4
+        with:
+          # Where Xcode stores downloaded Swift Packages by default
+          path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
+          # The unique lock key. If your Package.resolved file changes, this busts the cache and downloads fresh.
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/*.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      # Step B: Select the correct Xcode version (Optional, but good practice for consistency)
+     # - name: Select Xcode 16
+      #  run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+
+      # Step C: The actual test execution
+      # We use 'set -o pipefail' so if the tests fail, the GitHub Action actually turns RED. 
+      - name: Run xcodebuild test
+        run: |
+          set -o pipefail && xcodebuild test \
+            -project TulumDeliverys.xcodeproj \
+            -scheme TulumDeliverys \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            | xcpretty
